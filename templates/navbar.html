@@ -1,0 +1,38 @@
+{% load static %}
+<header class="navbar-wrapper">
+    <div class="nav-left">
+        <a href="{% url 'home' %}" class="logo-link">
+            <img src="{% static 'images/myntra-logo.svg' %}" alt="Myntra" class="myntra-logo-img">
+        </a>
+        <nav class="nav-categories">
+            <a href="#">MEN</a>
+            <a href="#">WOMEN</a>
+            <a href="#">KIDS</a>
+            <a href="#">HOME & LIVING</a>
+            <a href="#">BEAUTY</a>
+            <a href="#" class="studio-link">STUDIO <sup class="new-tag">NEW</sup></a>
+        </nav>
+    </div>
+
+    <div class="nav-center">
+        <div class="search-box">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" placeholder="Search for products, brands and more">
+        </div>
+    </div>
+
+    <div class="nav-right">
+        <div class="nav-action">
+            <i class="fa-regular fa-user"></i>
+            <span>Profile</span>
+        </div>
+        <div class="nav-action">
+            <i class="fa-regular fa-heart"></i>
+            <span>Wishlist</span>
+        </div>
+        <div class="nav-action">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <span>Bag</span>
+        </div>
+    </div>
+</header>

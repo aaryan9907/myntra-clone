@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'home.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="main-container">
+    <!-- Hero / Promo Banner -->
+    <section class="hero-banner">
+        <div class="banner-content">
+            <p class="sub-heading">FLAT ₹400 OFF</p>
+            <h1>MEDAL WORTHY BRANDS TO BAG</h1>
+            <span class="cta-badge">+ FREE SHIPPING ON FIRST ORDER</span>
+        </div>
+    </section>
+
+    <!-- Product Grid Section -->
+    <section class="products-section">
+        <h2 class="section-title">DEALS OF THE DAY</h2>
+
+        <div class="product-grid">
+            {% for product in products %}
+            <div class="product-card">
+                <div class="image-wrapper">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.title }}">
+                    {% else %}
+                        <div class="no-img">No Image Available</div>
+                    {% endif %}
+                    
+                    <div class="rating-badge">
+                        <span>{{ product.rating }}</span>
+                        <i class="fa-solid fa-star"></i>
+                        <span class="separator">|</span>
+                        <span class="rating-count">{{ product.formatted_rating_count }}</span>
+                    </div>
+                </div>
+
+                <div class="product-info">
+                    <h3 class="product-brand">{{ product.brand }}</h3>
+                    <h4 class="product-title">{{ product.title }}</h4>
+                    <div class="price-container">
+                        <span class="discounted-price">₹{{ product.discounted_price }}</span>
+                        {% if product.discount_percentage > 0 %}
+                            <span class="original-price">₹{{ product.price|floatformat:0 }}</span>
+                            <span class="discount-percent">({{ product.discount_percentage }}% OFF)</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="no-products">
+                <p>No products added yet. Visit <a href="/admin/">Django Admin</a> to add some!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}
