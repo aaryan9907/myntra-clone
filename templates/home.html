@@ -102,11 +102,14 @@
 
     {% else %}
         <!-- CLEAN HOMEPAGE VIEW (No Sidebar) -->
-        <section class="hero-banner">
-            <div class="banner-content">
-                <p class="sub-heading">FLAT ₹400 OFF</p>
-                <h1>MEDAL WORTHY BRANDS TO BAG</h1>
-                <span class="cta-badge">+ FREE SHIPPING ON FIRST ORDER</span>
+        <!-- Festive Hero Banner -->
+        <section class="festive-hero-wrapper">
+            <div class="banner-image-container">
+                <img src="{% static 'images/hero-bg.png' %}" alt="Myntra Diwali Sale" class="hero-banner-img">
+                
+                <!-- Clickable hotlinks for Her & Him over the banner -->
+                <a href="{% url 'home' %}?gender=women" class="hero-hotspot her-hotspot" title="Shop Women"></a>
+                <a href="{% url 'home' %}?gender=men" class="hero-hotspot him-hotspot" title="Shop Men"></a>
             </div>
         </section>
 

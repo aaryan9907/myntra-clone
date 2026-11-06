@@ -67,8 +67,12 @@
 
 .new-tag {
     color: #ff3f6c;
-    font-size: 10px;
-    font-weight: bold;
+    font-size: 9px;
+    font-weight: 700;
+    vertical-align: super;
+    position: relative;
+    top: -5px;
+    left: 2px;
 }
 
 /* Floating Mega Menu */
