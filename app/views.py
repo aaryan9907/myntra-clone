@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 from .models import Product, Category
 from django.contrib.auth import login, logout, authenticate
@@ -114,3 +114,18 @@ def user_logout(request):
 @login_required(login_url='login')
 def profile_view(request):
     return render(request, 'profile.html', {'user': request.user})
+
+def product_detail(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    
+    # Grab related products from the same category
+    similar_products = Product.objects.filter(
+        category=product.category
+    ).exclude(pk=product.pk)[:5]
+
+    context = {
+        'product': product,
+        'similar_products': similar_products,
+        'sizes': ['S', 'M', 'L', 'XL', 'XXL'],
+    }
+    return render(request, 'product_detail.html', context)

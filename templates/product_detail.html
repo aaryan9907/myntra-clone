@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ product.brand }} {{ product.title }} - Buy Online | Myntra{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'pdp.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="pdp-container">
+    
+    <!-- Breadcrumb Navigation -->
+    <nav class="pdp-breadcrumb">
+        <a href="{% url 'home' %}">Home</a> /
+        <a href="{% url 'home' %}?gender={{ product.category.gender }}">{{ product.category.gender|upper }}</a> /
+        <a href="{% url 'home' %}?gender={{ product.category.gender }}&category={{ product.category.slug }}">{{ product.category.name }}</a> /
+        <span>{{ product.brand }}</span>
+    </nav>
+
+    <!-- Main PDP Grid -->
+    <div class="pdp-layout">
+        
+        <!-- Left: Image Viewer Gallery -->
+        <div class="pdp-gallery">
+            <div class="gallery-image-box">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.title }}">
+                {% else %}
+                    <div class="no-image-placeholder">No Image Available</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Right: Sticky Product Info & Actions -->
+        <div class="pdp-details">
+            <div class="pdp-header">
+                <h1 class="pdp-brand">{{ product.brand }}</h1>
+                <h2 class="pdp-title">{{ product.title }}</h2>
+
+                <div class="pdp-rating-badge">
+                    <span class="rating-value">{{ product.rating }}</span>
+                    <i class="fa-solid fa-star"></i>
+                    <span class="badge-separator">|</span>
+                    <span class="rating-count-text">{{ product.formatted_rating_count }} Ratings</span>
+                </div>
+            </div>
+
+            <hr class="pdp-divider">
+
+            <!-- Price Breakdown -->
+            <div class="pdp-pricing">
+                <span class="pdp-discounted-price">₹{{ product.discounted_price }}</span>
+                {% if product.discount_percentage > 0 %}
+                    <span class="pdp-original-price">MRP ₹{{ product.price|floatformat:0 }}</span>
+                    <span class="pdp-discount-tag">({{ product.discount_percentage }}% OFF)</span>
+                {% endif %}
+                <span class="tax-inclusive-label">inclusive of all taxes</span>
+            </div>
+
+            <!-- Size Selector -->
+            <div class="pdp-size-section">
+                <div class="size-header">
+                    <h4>SELECT SIZE</h4>
+                    <button type="button" class="size-chart-btn">SIZE CHART &gt;</button>
+                </div>
+                <div class="size-button-group">
+                    {% for size in sizes %}
+                        <button type="button" class="size-btn" onclick="selectSize(this, '{{ size }}')">{{ size }}</button>
+                    {% endfor %}
+                </div>
+                <input type="hidden" id="selected-size" value="">
+                <p id="size-error" class="size-error-msg">Please select a size before adding to bag</p>
+            </div>
+
+            <!-- Action CTAs -->
+            <div class="pdp-action-buttons">
+                <button type="button" class="add-to-bag-btn" onclick="handleAddToBag()">
+                    <i class="fa-solid fa-bag-shopping"></i> ADD TO BAG
+                </button>
+                <button type="button" class="wishlist-btn">
+                    <i class="fa-regular fa-heart"></i> WISHLIST
+                </button>
+            </div>
+
+            <hr class="pdp-divider">
+
+            <!-- Delivery & Pincode Checker -->
+            <div class="delivery-pincode-section">
+                <h4>DELIVERY OPTIONS <i class="fa-solid fa-truck"></i></h4>
+                <div class="pincode-input-box">
+                    <input type="text" id="pincode-input" placeholder="Enter pincode" maxlength="6">
+                    <button type="button" id="pincode-check-btn" onclick="checkPincode()">Check</button>
+                </div>
+                <p id="pincode-status" class="pincode-status-text"></p>
+                <ul class="delivery-features-list">
+                    <li><i class="fa-solid fa-check"></i> 100% Original Products</li>
+                    <li><i class="fa-solid fa-arrow-rotate-left"></i> Pay on delivery might be available</li>
+                    <li><i class="fa-solid fa-box-open"></i> Easy 14 days returns and exchanges</li>
+                </ul>
+            </div>
+
+            <hr class="pdp-divider">
+
+            <!-- Product Description / Details -->
+            <div class="product-description-section">
+                <h4>PRODUCT DETAILS</h4>
+                <p class="description-text">
+                    {{ product.description|default:"Elevate your everyday wardrobe with this classic piece. Crafted from high-grade fabric for lasting comfort and contemporary flair." }}
+                </p>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let currentSelectedSize = null;
+
+    function selectSize(btn, size) {
+        document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentSelectedSize = size;
+        document.getElementById('selected-size').value = size;
+        document.getElementById('size-error').style.display = 'none';
+    }
+
+    function handleAddToBag() {
+        if (!currentSelectedSize) {
+            document.getElementById('size-error').style.display = 'block';
+            return;
+        }
+        alert(`Added ${currentSelectedSize} to your shopping bag!`);
+    }
+
+    function checkPincode() {
+        const pin = document.getElementById('pincode-input').value.trim();
+        const statusEl = document.getElementById('pincode-status');
+
+        if (pin.length === 6 && !isNaN(pin)) {
+            statusEl.innerHTML = `<span style="color: #03a685; font-weight: 600;"><i class="fa-solid fa-circle-check"></i> Delivery by Wednesday, Nov 11</span>`;
+        } else {
+            statusEl.innerHTML = `<span style="color: #d32f2f; font-weight: 500;">Please enter a valid 6-digit PIN code</span>`;
+        }
+    }
+</script>
+{% endblock %}
