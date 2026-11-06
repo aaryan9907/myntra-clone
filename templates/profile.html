@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Account Overview | Myntra{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 40px auto; padding: 0 20px;">
+    <h2 style="font-size: 22px; font-weight: 800; color: #282c3f; margin-bottom: 25px;">Account Overview</h2>
+    
+    <div style="display: grid; grid-template-columns: 280px 1fr; gap: 30px;">
+        <!-- Left Nav Box -->
+        <div style="background: #ffffff; border: 1px solid #e9e9eb; border-radius: 4px; padding: 20px;">
+            <div style="display: flex; align-items: center; gap: 15px; padding-bottom: 16px; border-bottom: 1px solid #e9e9eb;">
+                <div style="width: 48px; height: 48px; border-radius: 50%; background: #f5f5f6; display: flex; justify-content: center; align-items: center; font-size: 20px; color: #696e79;">
+                    <i class="fa-regular fa-user"></i>
+                </div>
+                <div>
+                    <strong style="color: #282c3f; font-size: 15px;">{{ user.username }}</strong>
+                    <span style="display: block; font-size: 12px; color: #878b94;">{{ user.email|default:"No email linked" }}</span>
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 16px;">
+                <a href="#" style="text-decoration: none; font-size: 14px; color: #ff3f6c; font-weight: 700;">Overview</a>
+                <a href="#" style="text-decoration: none; font-size: 14px; color: #282c3f; font-weight: 500;">Orders & Returns</a>
+                <a href="#" style="text-decoration: none; font-size: 14px; color: #282c3f; font-weight: 500;">Coupons</a>
+                <a href="#" style="text-decoration: none; font-size: 14px; color: #282c3f; font-weight: 500;">Saved Addresses</a>
+            </div>
+        </div>
+
+        <!-- Right Details Box -->
+        <div style="background: #ffffff; border: 1px solid #e9e9eb; border-radius: 4px; padding: 30px;">
+            <h3 style="font-size: 16px; font-weight: 700; color: #282c3f; margin-bottom: 20px;">Profile Details</h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <span style="font-size: 12px; color: #878b94; display: block; margin-bottom: 4px;">Full Name</span>
+                    <strong style="font-size: 14px; color: #282c3f;">{{ user.get_full_name|default:"Not specified" }}</strong>
+                </div>
+                <div>
+                    <span style="font-size: 12px; color: #878b94; display: block; margin-bottom: 4px;">Username</span>
+                    <strong style="font-size: 14px; color: #282c3f;">{{ user.username }}</strong>
+                </div>
+                <div>
+                    <span style="font-size: 12px; color: #878b94; display: block; margin-bottom: 4px;">Email ID</span>
+                    <strong style="font-size: 14px; color: #282c3f;">{{ user.email|default:"Not specified" }}</strong>
+                </div>
+                <div>
+                    <span style="font-size: 12px; color: #878b94; display: block; margin-bottom: 4px;">Member Since</span>
+                    <strong style="font-size: 14px; color: #282c3f;">{{ user.date_joined|date:"M d, Y" }}</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

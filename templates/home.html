@@ -7,55 +7,146 @@
 
 {% block content %}
 <div class="main-container">
-    <!-- Hero / Promo Banner -->
-    <section class="hero-banner">
-        <div class="banner-content">
-            <p class="sub-heading">FLAT ₹400 OFF</p>
-            <h1>MEDAL WORTHY BRANDS TO BAG</h1>
-            <span class="cta-badge">+ FREE SHIPPING ON FIRST ORDER</span>
+
+    {% if is_filtered_view %}
+        <!-- FILTERED / CATEGORY VIEW -->
+        <div class="page-meta-header">
+            <div class="breadcrumbs">
+                <a href="{% url 'home' %}">Home</a> / 
+                <span>{% if selected_gender %}{{ selected_gender|upper }}{% else %}SEARCH{% endif %}</span>
+            </div>
+            <div class="results-count-title">
+                <h3>{% if selected_gender %}{{ selected_gender|title }}'s Apparel{% elif query %}Search: "{{ query }}"{% else %}Products{% endif %}</h3>
+                <span class="count-badge">- {{ total_count }} items</span>
+            </div>
         </div>
-    </section>
 
-    <!-- Product Grid Section -->
-    <section class="products-section">
-        <h2 class="section-title">DEALS OF THE DAY</h2>
-
-        <div class="product-grid">
-            {% for product in products %}
-            <div class="product-card">
-                <div class="image-wrapper">
-                    {% if product.image %}
-                        <img src="{{ product.image.url }}" alt="{{ product.title }}">
-                    {% else %}
-                        <div class="no-img">No Image Available</div>
+        <div class="catalog-layout">
+            <!-- Left Filter Sidebar (ONLY visible when filtered) -->
+            <aside class="filter-sidebar">
+                <form id="filter-form" method="GET" action="{% url 'home' %}">
+                    {% if selected_gender %}
+                        <input type="hidden" name="gender" value="{{ selected_gender }}">
                     {% endif %}
-                    
-                    <div class="rating-badge">
-                        <span>{{ product.rating }}</span>
-                        <i class="fa-solid fa-star"></i>
-                        <span class="separator">|</span>
-                        <span class="rating-count">{{ product.formatted_rating_count }}</span>
+                    {% if query %}
+                        <input type="hidden" name="q" value="{{ query }}">
+                    {% endif %}
+                    <input type="hidden" name="sort" id="sort-hidden-input" value="{{ selected_sort }}">
+
+                    <div class="filter-section-header">
+                        <h4>FILTERS</h4>
+                        <a href="{% url 'home' %}{% if selected_gender %}?gender={{ selected_gender }}{% endif %}" class="clear-all-btn">CLEAR ALL</a>
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div class="filter-block">
+                        <span class="filter-title">CATEGORIES</span>
+                        <div class="filter-options-list">
+                            {% for cat in categories %}
+                            <label class="filter-checkbox-label">
+                                <input type="checkbox" name="category" value="{{ cat.slug }}" 
+                                    {% if cat.slug in selected_categories %}checked{% endif %} 
+                                    onchange="document.getElementById('filter-form').submit();">
+                                <span class="label-text">{{ cat.name }}</span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Brand Filter -->
+                    <div class="filter-block">
+                        <span class="filter-title">BRAND</span>
+                        <div class="filter-options-list">
+                            {% for brand in available_brands %}
+                            <label class="filter-checkbox-label">
+                                <input type="checkbox" name="brand" value="{{ brand }}" 
+                                    {% if brand in selected_brands %}checked{% endif %} 
+                                    onchange="document.getElementById('filter-form').submit();">
+                                <span class="label-text">{{ brand }}</span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </form>
+            </aside>
+
+            <!-- Right Products Section -->
+            <section class="catalog-content">
+                <div class="sorting-row">
+                    <div class="sort-selector-wrapper">
+                        <label for="sort-select">Sort by :</label>
+                        <select id="sort-select" onchange="applySort(this.value)">
+                            <option value="new" {% if selected_sort == 'new' %}selected{% endif %}>What's New</option>
+                            <option value="price_low" {% if selected_sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                            <option value="price_high" {% if selected_sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+                            <option value="rating" {% if selected_sort == 'rating' %}selected{% endif %}>Customer Rating</option>
+                            <option value="discount" {% if selected_sort == 'discount' %}selected{% endif %}>Better Discount</option>
+                        </select>
                     </div>
                 </div>
 
-                <div class="product-info">
-                    <h3 class="product-brand">{{ product.brand }}</h3>
-                    <h4 class="product-title">{{ product.title }}</h4>
-                    <div class="price-container">
-                        <span class="discounted-price">₹{{ product.discounted_price }}</span>
-                        {% if product.discount_percentage > 0 %}
-                            <span class="original-price">₹{{ product.price|floatformat:0 }}</span>
-                            <span class="discount-percent">({{ product.discount_percentage }}% OFF)</span>
-                        {% endif %}
-                    </div>
+                <!-- Product Grid -->
+                <div class="product-grid">
+                    {% for product in products %}
+                        {% include 'product_card.html' with product=product %}
+                    {% empty %}
+                        <div class="no-products">
+                            <i class="fa-solid fa-magnifying-glass" style="font-size: 32px; color: #94969f; margin-bottom: 12px;"></i>
+                            <p>No products match your active filters.</p>
+                            <a href="{% url 'home' %}" class="reset-link">Reset all filters</a>
+                        </div>
+                    {% endfor %}
                 </div>
-            </div>
-            {% empty %}
-            <div class="no-products">
-                <p>No products added yet. Visit <a href="/admin/">Django Admin</a> to add some!</p>
-            </div>
-            {% endfor %}
+            </section>
         </div>
-    </section>
+
+    {% else %}
+        <!-- CLEAN HOMEPAGE VIEW (No Sidebar) -->
+        <section class="hero-banner">
+            <div class="banner-content">
+                <p class="sub-heading">FLAT ₹400 OFF</p>
+                <h1>MEDAL WORTHY BRANDS TO BAG</h1>
+                <span class="cta-badge">+ FREE SHIPPING ON FIRST ORDER</span>
+            </div>
+        </section>
+
+        <!-- Category Shortcuts Section -->
+        <section class="category-shortcuts-section">
+            <h2 class="section-title">SHOP BY CATEGORY</h2>
+            <div class="category-tiles-container">
+                <a href="{% url 'home' %}?gender=men" class="category-tile men-tile">
+                    <h3>MEN'S WEAR</h3>
+                    <p>Explore Shirts, T-Shirts & Jeans</p>
+                </a>
+                <a href="{% url 'home' %}?gender=women" class="category-tile women-tile">
+                    <h3>WOMEN'S WEAR</h3>
+                    <p>Explore Dresses, Tops & Jeans</p>
+                </a>
+            </div>
+        </section>
+
+        <!-- Full-Width Deals of the Day Grid -->
+        <section class="deals-section">
+            <h2 class="section-title">DEALS OF THE DAY</h2>
+            <div class="product-grid full-width-grid">
+                {% for product in products %}
+                    {% include 'product_card.html' with product=product %}
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
+
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function applySort(val) {
+        var input = document.getElementById('sort-hidden-input');
+        if (input) {
+            input.value = val;
+            document.getElementById('filter-form').submit();
+        }
+    }
+</script>
 {% endblock %}

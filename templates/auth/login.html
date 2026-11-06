@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Login | Myntra{% endblock %}
+
+{% block content %}
+<div style="min-height: calc(100vh - 80px); display: flex; justify-content: center; align-items: center; background-color: #fdf0f3; padding: 40px 20px;">
+    <div style="background: #ffffff; width: 100%; max-width: 400px; padding: 40px 35px; border-radius: 4px; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);">
+        <h2 style="font-size: 20px; font-weight: 800; color: #282c3f; margin-bottom: 6px;">Login <span style="font-size: 14px; font-weight: 500; color: #696e79;">or Signup</span></h2>
+        <p style="font-size: 13px; color: #878b94; margin-bottom: 25px;">Get access to your Orders, Wishlist and Recommendations</p>
+
+        <form method="POST">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+                <div style="color: #d32f2f; font-size: 13px; margin-bottom: 15px;">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div style="margin-bottom: 18px;">
+                <label style="display: block; font-size: 12px; font-weight: 700; color: #282c3f; margin-bottom: 6px;">Username</label>
+                <input type="text" name="username" required style="width: 100%; padding: 10px 12px; border: 1px solid #d4d5d9; border-radius: 2px; font-size: 14px; outline: none;">
+            </div>
+
+            <div style="margin-bottom: 25px;">
+                <label style="display: block; font-size: 12px; font-weight: 700; color: #282c3f; margin-bottom: 6px;">Password</label>
+                <input type="password" name="password" required style="width: 100%; padding: 10px 12px; border: 1px solid #d4d5d9; border-radius: 2px; font-size: 14px; outline: none;">
+            </div>
+
+            <button type="submit" style="width: 100%; padding: 12px; background-color: #ff3f6c; color: #ffffff; border: none; font-size: 14px; font-weight: 700; border-radius: 2px; cursor: pointer;">CONTINUE</button>
+        </form>
+
+        <p style="font-size: 13px; text-align: center; color: #535766; margin-top: 22px;">
+            New to Myntra? <a href="{% url 'signup' %}" style="color: #ff3f6c; font-weight: 700; text-decoration: none;">Create an account</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

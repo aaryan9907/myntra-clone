@@ -4,27 +4,120 @@
         <a href="{% url 'home' %}" class="logo-link">
             <img src="{% static 'images/myntra-logo.svg' %}" alt="Myntra" class="myntra-logo-img">
         </a>
+
         <nav class="nav-categories">
-            <a href="#">MEN</a>
-            <a href="#">WOMEN</a>
-            <a href="#">KIDS</a>
-            <a href="#">HOME & LIVING</a>
-            <a href="#">BEAUTY</a>
-            <a href="#" class="studio-link">STUDIO <sup class="new-tag">NEW</sup></a>
+            <!-- MEN Dropdown -->
+            <div class="nav-item-dropdown">
+                <a href="{% url 'home' %}?gender=men" class="nav-link-top">MEN</a>
+                <div class="mega-menu">
+                    <div class="mega-menu-column">
+                        <span class="menu-heading">Topwear & Bottomwear</span>
+                        {% for cat in men_categories %}
+                            <a href="{% url 'home' %}?gender=men&category={{ cat.slug }}">{{ cat.name }}</a>
+                        {% empty %}
+                            <span class="empty-item">No categories</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- WOMEN Dropdown -->
+            <div class="nav-item-dropdown">
+                <a href="{% url 'home' %}?gender=women" class="nav-link-top">WOMEN</a>
+                <div class="mega-menu">
+                    <div class="mega-menu-column">
+                        <span class="menu-heading">Indian & Western Wear</span>
+                        {% for cat in women_categories %}
+                            <a href="{% url 'home' %}?gender=women&category={{ cat.slug }}">{{ cat.name }}</a>
+                        {% empty %}
+                            <span class="empty-item">No categories</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- KIDS Dropdown -->
+            <div class="nav-item-dropdown">
+                <a href="{% url 'home' %}?gender=kids" class="nav-link-top">KIDS</a>
+                <div class="mega-menu">
+                    <div class="mega-menu-column">
+                        <span class="menu-heading">Boys & Girls Clothing</span>
+                        {% for cat in kids_categories %}
+                            <a href="{% url 'home' %}?gender=kids&category={{ cat.slug }}">{{ cat.name }}</a>
+                        {% empty %}
+                            <span class="empty-item">Coming soon</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-item-dropdown">
+                <a href="{% url 'home' %}?gender=home" class="nav-link-top">HOME & LIVING</a>
+            </div>
+
+            <div class="nav-item-dropdown">
+                <a href="{% url 'home' %}?gender=beauty" class="nav-link-top">BEAUTY</a>
+            </div>
+
+            <div class="nav-item-dropdown">
+                <a href="#" class="nav-link-top studio-link">STUDIO <sup class="new-tag">NEW</sup></a>
+            </div>
         </nav>
     </div>
 
     <div class="nav-center">
-        <div class="search-box">
+        <form action="{% url 'home' %}" method="GET" class="search-box">
+            {% if selected_gender %}
+                <input type="hidden" name="gender" value="{{ selected_gender }}">
+            {% endif %}
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
-            <input type="text" placeholder="Search for products, brands and more">
-        </div>
+            <input type="text" name="q" value="{{ query }}" placeholder="Search for products, brands and more">
+        </form>
     </div>
 
     <div class="nav-right">
-        <div class="nav-action">
-            <i class="fa-regular fa-user"></i>
-            <span>Profile</span>
+        <div class="nav-action profile-dropdown-wrapper">
+            <a href="{% if user.is_authenticated %}{% url 'profile' %}{% else %}{% url 'login' %}{% endif %}" class="profile-nav-link">
+                <i class="fa-regular fa-user"></i>
+                <span>Profile</span>
+            </a>
+
+            <!-- Floating Profile Menu Card -->
+            <div class="profile-flyout">
+                {% if user.is_authenticated %}
+                    <div class="profile-flyout-header logged-in">
+                        <span class="user-greeting">Hello,</span>
+                        <span class="user-display-name">{{ user.first_name|default:user.username }}</span>
+                        <span class="user-subtext">{{ user.email }}</span>
+                    </div>
+                    <div class="profile-flyout-links">
+                        <a href="{% url 'profile' %}">Overview</a>
+                        <a href="#">Orders</a>
+                        <a href="#">Wishlist</a>
+                        <a href="#">Myntra Insider <sup class="new-tag">NEW</sup></a>
+                        <a href="#">Contact Us</a>
+                    </div>
+                    <div class="profile-flyout-footer">
+                        <form action="{% url 'logout' %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="logout-btn">LOGOUT</button>
+                        </form>
+                    </div>
+                {% else %}
+                    <div class="profile-flyout-header">
+                        <h4>Welcome</h4>
+                        <p>To access account and manage orders</p>
+                        <a href="{% url 'login' %}" class="profile-auth-btn">LOGIN / SIGNUP</a>
+                    </div>
+                    <div class="profile-flyout-links">
+                        <a href="{% url 'login' %}">Orders</a>
+                        <a href="{% url 'login' %}">Wishlist</a>
+                        <a href="#">Gift Cards</a>
+                        <a href="#">Contact Us</a>
+                        <a href="#">Myntra Insider <sup class="new-tag">NEW</sup></a>
+                    </div>
+                {% endif %}
+            </div>
         </div>
         <div class="nav-action">
             <i class="fa-regular fa-heart"></i>
