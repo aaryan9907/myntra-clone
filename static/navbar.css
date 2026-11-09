@@ -346,3 +346,26 @@
     border-color: #ff3f6c;
     color: #ff3f6c;
 }
+
+/* Badge styling on icons */
+.nav-badge-parent {
+    position: relative;
+    text-decoration: none;
+}
+
+.nav-icon-badge {
+    position: absolute;
+    top: -5px;
+    right: 3px;
+    background-color: #ff3f6c;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    min-width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+}

@@ -4,6 +4,9 @@ from .models import Product, Category
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.decorators import login_required
+from decimal import Decimal
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
 
 def show(request):
     all_categories = Category.objects.all()
@@ -129,3 +132,100 @@ def product_detail(request, pk):
         'sizes': ['S', 'M', 'L', 'XL', 'XXL'],
     }
     return render(request, 'product_detail.html', context)
+
+# --- CART / BAG VIEWS ---
+
+@require_POST
+def add_to_bag(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    size = request.POST.get('size')
+    
+    if not size:
+        return JsonResponse({'status': 'error', 'message': 'Please select a size'}, status=400)
+    
+    cart = request.session.get('cart', {})
+    # Key items by product_id and size (e.g., "12-M")
+    cart_key = f"{product.id}-{size}"
+    cart[cart_key] = cart.get(cart_key, 0) + 1
+    
+    request.session['cart'] = cart
+    request.session.modified = True
+    
+    total_count = sum(cart.values())
+    return JsonResponse({'status': 'success', 'cart_count': total_count})
+
+
+def bag_view(request):
+    cart = request.session.get('cart', {})
+    cart_items = []
+    total_mrp = 0
+    total_discounted = 0
+
+    for cart_key, quantity in cart.items():
+        product_id, size = cart_key.split('-')
+        try:
+            product = Product.objects.get(id=product_id)
+            item_mrp_total = int(round(product.price)) * quantity
+            item_discounted_total = product.discounted_price * quantity
+
+            total_mrp += item_mrp_total
+            total_discounted += item_discounted_total
+
+            cart_items.append({
+                'cart_key': cart_key,
+                'product': product,
+                'size': size,
+                'quantity': quantity,
+                'item_mrp_total': item_mrp_total,
+                'item_discounted_total': item_discounted_total,
+            })
+        except Product.DoesNotExist:
+            continue
+
+    discount_on_mrp = total_mrp - total_discounted
+    convenience_fee = 20 if cart_items else 0
+    final_amount = total_discounted + convenience_fee
+
+    context = {
+        'cart_items': cart_items,
+        'total_mrp': total_mrp,
+        'discount_on_mrp': discount_on_mrp,
+        'convenience_fee': convenience_fee,
+        'final_amount': final_amount,
+    }
+    return render(request, 'bag.html', context)
+
+
+@require_POST
+def remove_from_bag(request, cart_key):
+    cart = request.session.get('cart', {})
+    if cart_key in cart:
+        del cart[cart_key]
+        request.session['cart'] = cart
+        request.session.modified = True
+    return redirect('bag')
+
+
+# --- WISHLIST VIEWS ---
+
+@require_POST
+def toggle_wishlist(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    wishlist = request.session.get('wishlist', [])
+
+    if product.id in wishlist:
+        wishlist.remove(product.id)
+        action = 'removed'
+    else:
+        wishlist.append(product.id)
+        action = 'added'
+
+    request.session['wishlist'] = wishlist
+    request.session.modified = True
+    return JsonResponse({'status': 'success', 'action': action, 'wishlist_count': len(wishlist)})
+
+
+def wishlist_view(request):
+    wishlist_ids = request.session.get('wishlist', [])
+    products = Product.objects.filter(id__in=wishlist_ids)
+    return render(request, 'wishlist.html', {'products': products})

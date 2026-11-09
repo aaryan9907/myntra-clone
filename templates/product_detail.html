@@ -75,10 +75,10 @@
 
             <!-- Action CTAs -->
             <div class="pdp-action-buttons">
-                <button type="button" class="add-to-bag-btn" onclick="handleAddToBag()">
+                <button type="button" class="add-to-bag-btn" id="add-to-bag-cta" onclick="handleAddToBag()">
                     <i class="fa-solid fa-bag-shopping"></i> ADD TO BAG
                 </button>
-                <button type="button" class="wishlist-btn">
+                <button type="button" class="wishlist-btn" id="wishlist-cta" onclick="handleToggleWishlist()">
                     <i class="fa-regular fa-heart"></i> WISHLIST
                 </button>
             </div>
@@ -123,7 +123,6 @@
         document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         currentSelectedSize = size;
-        document.getElementById('selected-size').value = size;
         document.getElementById('size-error').style.display = 'none';
     }
 
@@ -132,18 +131,72 @@
             document.getElementById('size-error').style.display = 'block';
             return;
         }
-        alert(`Added ${currentSelectedSize} to your shopping bag!`);
+
+        const formData = new FormData();
+        formData.append('size', currentSelectedSize);
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+        fetch("{% url 'add_to_bag' product.id %}", {
+            method: 'POST',
+            body: formData,
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                const btn = document.getElementById('add-to-bag-cta');
+                btn.innerHTML = `<i class="fa-solid fa-check"></i> ADDED TO BAG`;
+                btn.style.backgroundColor = '#03a685';
+                
+                // Update badge in navbar
+                let badge = document.getElementById('nav-bag-count');
+                if (!badge) {
+                    const parent = document.querySelector('a[href="{% url 'bag' %}"]');
+                    badge = document.createElement('span');
+                    badge.className = 'nav-icon-badge';
+                    badge.id = 'nav-bag-count';
+                    parent.appendChild(badge);
+                }
+                badge.innerText = data.cart_count;
+            }
+        });
     }
 
-    function checkPincode() {
-        const pin = document.getElementById('pincode-input').value.trim();
-        const statusEl = document.getElementById('pincode-status');
+    function handleToggleWishlist() {
+        const formData = new FormData();
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
 
-        if (pin.length === 6 && !isNaN(pin)) {
-            statusEl.innerHTML = `<span style="color: #03a685; font-weight: 600;"><i class="fa-solid fa-circle-check"></i> Delivery by Wednesday, Nov 11</span>`;
-        } else {
-            statusEl.innerHTML = `<span style="color: #d32f2f; font-weight: 500;">Please enter a valid 6-digit PIN code</span>`;
-        }
+        fetch("{% url 'toggle_wishlist' product.id %}", {
+            method: 'POST',
+            body: formData,
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                const btn = document.getElementById('wishlist-cta');
+                if (data.action === 'added') {
+                    btn.innerHTML = `<i class="fa-solid fa-heart" style="color: #ff3f6c;"></i> WISHLISTED`;
+                } else {
+                    btn.innerHTML = `<i class="fa-regular fa-heart"></i> WISHLIST`;
+                }
+
+                // Update Wishlist badge
+                let badge = document.getElementById('nav-wishlist-count');
+                if (!badge && data.wishlist_count > 0) {
+                    const parent = document.querySelector('a[href="{% url 'wishlist' %}"]');
+                    badge = document.createElement('span');
+                    badge.className = 'nav-icon-badge';
+                    badge.id = 'nav-wishlist-count';
+                    parent.appendChild(badge);
+                }
+                if (badge) {
+                    if (data.wishlist_count > 0) {
+                        badge.innerText = data.wishlist_count;
+                    } else {
+                        badge.remove();
+                    }
+                }
+            }
+        });
     }
 </script>
 {% endblock %}

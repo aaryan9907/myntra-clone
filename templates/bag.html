@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Shopping Bag | Myntra{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'bag.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="bag-page-container">
+    {% if cart_items %}
+    <div class="bag-layout">
+        <!-- Left Column: Items Breakdown -->
+        <div class="bag-items-column">
+            <div class="delivery-address-ribbon">
+                <div>
+                    <span class="ribbon-text">Deliver to: <strong>110001 (New Delhi)</strong></span>
+                </div>
+                <button type="button" class="change-address-btn">CHANGE ADDRESS</button>
+            </div>
+
+            <div class="items-header">
+                <h3>ITEMS IN BAG ({{ cart_items|length }})</h3>
+            </div>
+
+            <div class="cart-items-list">
+                {% for item in cart_items %}
+                <div class="cart-item-card">
+                    <div class="item-img-box">
+                        {% if item.product.image %}
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.title }}">
+                        {% endif %}
+                    </div>
+                    <div class="item-details-box">
+                        <div class="item-header-row">
+                            <span class="item-brand">{{ item.product.brand }}</span>
+                            <form action="{% url 'remove_from_bag' item.cart_key %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="remove-item-btn" title="Remove">&times;</button>
+                            </form>
+                        </div>
+                        <h4 class="item-title">{{ item.product.title }}</h4>
+                        
+                        <div class="item-meta-selectors">
+                            <span class="meta-tag">Size: <strong>{{ item.size }}</strong></span>
+                            <span class="meta-tag">Qty: <strong>{{ item.quantity }}</strong></span>
+                        </div>
+
+                        <div class="item-pricing">
+                            <span class="discounted">₹{{ item.item_discounted_total }}</span>
+                            {% if item.product.discount_percentage > 0 %}
+                                <span class="original">₹{{ item.item_mrp_total }}</span>
+                                <span class="discount">({{ item.product.discount_percentage }}% OFF)</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="return-guarantee">
+                            <i class="fa-solid fa-arrow-rotate-left"></i> <strong>14 days</strong> return available
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Right Column: Price Summary -->
+        <div class="bag-summary-column">
+            <div class="price-summary-card">
+                <span class="summary-heading">PRICE DETAILS ({{ cart_items|length }} Items)</span>
+                
+                <div class="price-row">
+                    <span>Total MRP</span>
+                    <span>₹{{ total_mrp }}</span>
+                </div>
+                <div class="price-row">
+                    <span>Discount on MRP</span>
+                    <span class="discount-green">-₹{{ discount_on_mrp }}</span>
+                </div>
+                <div class="price-row">
+                    <span>Convenience Fee</span>
+                    <span>₹{{ convenience_fee }}</span>
+                </div>
+
+                <hr class="summary-divider">
+
+                <div class="price-row total-row">
+                    <span>Total Amount</span>
+                    <span>₹{{ final_amount }}</span>
+                </div>
+
+                <button type="button" class="place-order-btn">PLACE ORDER</button>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="empty-bag-view">
+        <i class="fa-solid fa-bag-shopping empty-icon"></i>
+        <h3>Hey, your bag is empty!</h3>
+        <p>There is nothing in your bag. Let's add some items.</p>
+        <a href="{% url 'home' %}" class="shop-now-btn">ADD ITEMS FROM WISHLIST / HOME</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -76,6 +76,7 @@
     </div>
 
     <div class="nav-right">
+        <!-- 1. Profile Dropdown -->
         <div class="nav-action profile-dropdown-wrapper">
             <a href="{% if user.is_authenticated %}{% url 'profile' %}{% else %}{% url 'login' %}{% endif %}" class="profile-nav-link">
                 <i class="fa-regular fa-user"></i>
@@ -93,7 +94,7 @@
                     <div class="profile-flyout-links">
                         <a href="{% url 'profile' %}">Overview</a>
                         <a href="#">Orders</a>
-                        <a href="#">Wishlist</a>
+                        <a href="{% url 'wishlist' %}">Wishlist</a>
                         <a href="#">Myntra Insider <sup class="new-tag">NEW</sup></a>
                         <a href="#">Contact Us</a>
                     </div>
@@ -111,7 +112,7 @@
                     </div>
                     <div class="profile-flyout-links">
                         <a href="{% url 'login' %}">Orders</a>
-                        <a href="{% url 'login' %}">Wishlist</a>
+                        <a href="{% url 'wishlist' %}">Wishlist</a>
                         <a href="#">Gift Cards</a>
                         <a href="#">Contact Us</a>
                         <a href="#">Myntra Insider <sup class="new-tag">NEW</sup></a>
@@ -119,13 +120,23 @@
                 {% endif %}
             </div>
         </div>
-        <div class="nav-action">
+
+        <!-- 2. Wishlist Link -->
+        <a href="{% url 'wishlist' %}" class="nav-action nav-badge-parent">
             <i class="fa-regular fa-heart"></i>
             <span>Wishlist</span>
-        </div>
-        <div class="nav-action">
+            {% if wishlist_count > 0 %}
+                <span class="nav-icon-badge" id="nav-wishlist-count">{{ wishlist_count }}</span>
+            {% endif %}
+        </a>
+
+        <!-- 3. Bag Link -->
+        <a href="{% url 'bag' %}" class="nav-action nav-badge-parent">
             <i class="fa-solid fa-bag-shopping"></i>
             <span>Bag</span>
-        </div>
+            {% if cart_count > 0 %}
+                <span class="nav-icon-badge" id="nav-bag-count">{{ cart_count }}</span>
+            {% endif %}
+        </a>
     </div>
 </header>
