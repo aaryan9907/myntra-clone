@@ -9,7 +9,7 @@
 ## 2. Student Details
 * **Course:** Django Web Application Project (Semester 3)
 * **Team Members:**
-  1. **Aaryan Rai** (Lead / Full-Stack Integration) — Roll No: `2502140002`
+  1. **Aaryan** — Roll No: `2502140002`
   2. **Nibha Singh** — Roll No: `2502140128`
   3. **Prakriti Rautela** — Roll No: `2502140057`
   4. **Sana** — Roll No: `2502140066`
