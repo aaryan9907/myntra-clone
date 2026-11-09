@@ -19,10 +19,10 @@
                 </div>
             </div>
             <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 16px;">
-                <a href="#" style="text-decoration: none; font-size: 14px; color: #ff3f6c; font-weight: 700;">Overview</a>
-                <a href="#" style="text-decoration: none; font-size: 14px; color: #282c3f; font-weight: 500;">Orders & Returns</a>
-                <a href="#" style="text-decoration: none; font-size: 14px; color: #282c3f; font-weight: 500;">Coupons</a>
-                <a href="#" style="text-decoration: none; font-size: 14px; color: #282c3f; font-weight: 500;">Saved Addresses</a>
+                <a href="{% url 'profile' %}" style="text-decoration: none; font-size: 14px; color: #ff3f6c; font-weight: 700;">Overview</a>
+                <a href="{% url 'bag' %}" style="text-decoration: none; font-size: 14px; color: #282c3f; font-weight: 500;">Orders & Returns</a>
+                <a href="{% url 'wishlist' %}" style="text-decoration: none; font-size: 14px; color: #282c3f; font-weight: 500;">Wishlist</a>
+                <a href="{% url 'home' %}" style="text-decoration: none; font-size: 14px; color: #282c3f; font-weight: 500;">Saved Addresses</a>
             </div>
         </div>
 

@@ -5,6 +5,52 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'bag.css' %}">
+<style>
+    .bag-item-controls {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 12px;
+    }
+    .qty-select-form {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: #282c3f;
+    }
+    .qty-dropdown {
+        border: 1px solid #d4d5d9;
+        border-radius: 4px;
+        padding: 3px 8px;
+        font-size: 13px;
+        font-weight: 700;
+        color: #282c3f;
+        background: #ffffff;
+        cursor: pointer;
+        outline: none;
+    }
+    .bag-secondary-actions {
+        display: flex;
+        gap: 18px;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px dashed #e9e9eb;
+    }
+    .text-action-btn {
+        background: none;
+        border: none;
+        color: #ff3f6c;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        padding: 0;
+        text-decoration: none;
+    }
+    .text-action-btn:hover {
+        text-decoration: underline;
+    }
+</style>
 {% endblock %}
 
 {% block content %}
@@ -42,9 +88,21 @@
                         </div>
                         <h4 class="item-title">{{ item.product.title }}</h4>
                         
-                        <div class="item-meta-selectors">
+                        <div class="bag-item-controls">
                             <span class="meta-tag">Size: <strong>{{ item.size }}</strong></span>
-                            <span class="meta-tag">Qty: <strong>{{ item.quantity }}</strong></span>
+                            
+                            <!-- Dynamic Quantity Selector Form -->
+                            <form action="{% url 'update_bag_quantity' item.cart_key %}" method="POST" class="qty-select-form">
+                                {% csrf_token %}
+                                <label for="qty-{{ item.cart_key }}">Qty:</label>
+                                <select name="quantity" id="qty-{{ item.cart_key }}" class="qty-dropdown" onchange="this.form.submit()">
+                                    <option value="1" {% if item.quantity == 1 %}selected{% endif %}>1</option>
+                                    <option value="2" {% if item.quantity == 2 %}selected{% endif %}>2</option>
+                                    <option value="3" {% if item.quantity == 3 %}selected{% endif %}>3</option>
+                                    <option value="4" {% if item.quantity == 4 %}selected{% endif %}>4</option>
+                                    <option value="5" {% if item.quantity == 5 %}selected{% endif %}>5</option>
+                                </select>
+                            </form>
                         </div>
 
                         <div class="item-pricing">
@@ -57,6 +115,13 @@
 
                         <div class="return-guarantee">
                             <i class="fa-solid fa-arrow-rotate-left"></i> <strong>14 days</strong> return available
+                        </div>
+
+                        <div class="bag-secondary-actions">
+                            <form action="{% url 'move_bag_to_wishlist' item.cart_key %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="text-action-btn"><i class="fa-regular fa-heart"></i> MOVE TO WISHLIST</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -89,7 +154,10 @@
                     <span>₹{{ final_amount }}</span>
                 </div>
 
-                <button type="button" class="place-order-btn">PLACE ORDER</button>
+                <form action="{% url 'place_order' %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="place-order-btn">PLACE ORDER</button>
+                </form>
             </div>
         </div>
     </div>

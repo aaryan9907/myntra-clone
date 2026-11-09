@@ -1,21 +1,31 @@
 {% load static %}
-<div class="product-card">
-    <a href="{% url 'product_detail' product.pk %}" class="product-card-link">
-        <div class="image-wrapper">
+<div class="product-card" data-product-id="{{ product.pk }}">
+    <div class="image-wrapper">
+        <a href="{% url 'product_detail' product.pk %}" class="product-card-link">
             {% if product.image %}
                 <img src="{{ product.image.url }}" alt="{{ product.title }}">
             {% else %}
                 <div class="no-img">No Image Available</div>
             {% endif %}
-            
-            <div class="rating-badge">
-                <span>{{ product.rating }}</span>
-                <i class="fa-solid fa-star"></i>
-                <span class="separator">|</span>
-                <span class="rating-count">{{ product.formatted_rating_count }}</span>
-            </div>
-        </div>
+        </a>
 
+        <!-- Wishlist Heart Button -->
+        <button type="button" 
+                class="card-wishlist-btn {% if product.pk in wishlist_ids %}active{% endif %}" 
+                onclick="toggleCardWishlist(event, '{{ product.pk }}')" 
+                title="Wishlist">
+            <i class="{% if product.pk in wishlist_ids %}fa-solid fa-heart{% else %}fa-regular fa-heart{% endif %}"></i>
+        </button>
+        
+        <div class="rating-badge">
+            <span>{{ product.rating }}</span>
+            <i class="fa-solid fa-star"></i>
+            <span class="separator">|</span>
+            <span class="rating-count">{{ product.formatted_rating_count }}</span>
+        </div>
+    </div>
+
+    <a href="{% url 'product_detail' product.pk %}" class="product-card-link">
         <div class="product-info">
             <h3 class="product-brand">{{ product.brand }}</h3>
             <h4 class="product-title">{{ product.title }}</h4>

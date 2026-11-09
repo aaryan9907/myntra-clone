@@ -9,6 +9,7 @@
     <!-- Google Fonts & Font Awesome for authentic Myntra icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'footer.css' %}">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
@@ -20,6 +21,163 @@
         {% endblock %}
     </main>
 
-    {% block extra_js %}{% endblock %}
+    <!-- Global Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-main-grid">
+                
+                <!-- Column 1: Online Shopping & Useful Links -->
+                <div class="footer-col">
+                    <p class="footer-heading">ONLINE SHOPPING</p>
+                    <ul class="footer-link-list">
+                        <li><a href="{% url 'home' %}?gender=men">Men</a></li>
+                        <li><a href="{% url 'home' %}?gender=women">Women</a></li>
+                        <li><a href="{% url 'home' %}?gender=kids">Kids</a></li>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'home' %}">Beauty</a></li>
+                        <li><a href="{% url 'home' %}">Genz</a></li>
+                        <li><a href="{% url 'home' %}">Gift Cards</a></li>
+                        <li><a href="{% url 'home' %}">Myntra Insider</a></li>
+                    </ul>
+
+                    <p class="footer-heading section-spacer">USEFUL LINKS</p>
+                    <ul class="footer-link-list">
+                        <li><a href="{% url 'home' %}">Blog</a></li>
+                        <li><a href="{% url 'home' %}">Careers</a></li>
+                        <li><a href="{% url 'home' %}">Site Map</a></li>
+                        <li><a href="{% url 'home' %}">Corporate Information</a></li>
+                        <li><a href="{% url 'home' %}">Whitehat</a></li>
+                        <li><a href="{% url 'home' %}">Cleartrip</a></li>
+                        <li><a href="{% url 'home' %}">Myntra Global</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 2: Customer Policies -->
+                <div class="footer-col">
+                    <p class="footer-heading">CUSTOMER POLICIES</p>
+                    <ul class="footer-link-list">
+                        <li><a href="{% url 'home' %}">Contact Us</a></li>
+                        <li><a href="{% url 'home' %}">FAQ</a></li>
+                        <li><a href="{% url 'home' %}">T&amp;C</a></li>
+                        <li><a href="{% url 'home' %}">Terms Of Use</a></li>
+                        <li><a href="{% url 'home' %}">Track Orders</a></li>
+                        <li><a href="{% url 'home' %}">Shipping</a></li>
+                        <li><a href="{% url 'home' %}">Cancellation</a></li>
+                        <li><a href="{% url 'home' %}">Privacy policy</a></li>
+                        <li><a href="{% url 'home' %}">Grievance Redressal</a></li>
+                        <li><a href="{% url 'home' %}">FSSAI Food Safety Connect app</a></li>
+                    </ul>
+                </div>
+
+                <!-- Column 3: App Downloads & Social -->
+                <div class="footer-col">
+                    <p class="footer-heading">EXPERIENCE MYNTRA APP ON MOBILE</p>
+                    
+                    <div class="app-download-buttons">
+                        <a href="https://play.google.com/store" target="_blank" rel="noopener" class="app-store-pill">
+                            <i class="fa-brands fa-google-play store-icon"></i>
+                            <div class="store-text">
+                                <span class="small-sub">GET IT ON</span>
+                                <span class="store-name">Google Play</span>
+                            </div>
+                        </a>
+                        <a href="https://www.apple.com/app-store/" target="_blank" rel="noopener" class="app-store-pill">
+                            <i class="fa-brands fa-apple store-icon"></i>
+                            <div class="store-text">
+                                <span class="small-sub">Download on the</span>
+                                <span class="store-name">App Store</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <p class="footer-heading section-spacer">KEEP IN TOUCH</p>
+                    <div class="social-links-row">
+                        <a href="https://facebook.com" target="_blank" rel="noopener"><i class="fa-brands fa-square-facebook"></i></a>
+                        <a href="https://twitter.com" target="_blank" rel="noopener"><i class="fa-brands fa-twitter"></i></a>
+                        <a href="https://youtube.com" target="_blank" rel="noopener"><i class="fa-brands fa-youtube"></i></a>
+                        <a href="https://instagram.com" target="_blank" rel="noopener"><i class="fa-brands fa-instagram"></i></a>
+                    </div>
+                </div>
+
+                <!-- Column 4: Original Guarantee & 14-day Returns -->
+                <div class="footer-col guarantees-col">
+                    
+                    <div class="guarantee-badge">
+                        <!-- Custom Stamp Icon -->
+                        <div class="stamp-icon-box">
+                            <span class="stamp-tag">ORIGINAL</span>
+                        </div>
+                        <div class="guarantee-caption">
+                            <p><strong>100% ORIGINAL</strong> guarantee for all products at myntra.com</p>
+                        </div>
+                    </div>
+
+                    <div class="guarantee-badge">
+                        <!-- Custom Return Arrow Box -->
+                        <div class="return-icon-box">
+                            <span class="return-num">14</span>
+                            <div class="return-arrow-indicator"></div>
+                        </div>
+                        <div class="guarantee-caption">
+                            <p><strong>Return within 14days</strong> of receiving your order</p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </footer>
+
+    {% block extra_js %}
+    <script>
+    function toggleCardWishlist(event, productId) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const formData = new FormData();
+        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+        fetch(`/wishlist/toggle/${productId}/`, {
+            method: 'POST',
+            body: formData,
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Find all matching buttons on the page for this product
+                const buttons = document.querySelectorAll(`.product-card[data-product-id="${productId}"] .card-wishlist-btn`);
+                buttons.forEach(btn => {
+                    const icon = btn.querySelector('i');
+                    if (data.action === 'added') {
+                        btn.classList.add('active');
+                        icon.className = 'fa-solid fa-heart';
+                    } else {
+                        btn.classList.remove('active');
+                        icon.className = 'fa-regular fa-heart';
+                    }
+                });
+
+                // Update Navbar Wishlist Badge Counter
+                let badge = document.getElementById('nav-wishlist-count');
+                const navLink = document.getElementById('nav-wishlist-link');
+                
+                if (data.wishlist_count > 0) {
+                    if (!badge && navLink) {
+                        badge = document.createElement('span');
+                        badge.className = 'nav-icon-badge';
+                        badge.id = 'nav-wishlist-count';
+                        navLink.appendChild(badge);
+                    }
+                    if (badge) badge.innerText = data.wishlist_count;
+                } else if (badge) {
+                    badge.remove();
+                }
+            }
+        })
+        .catch(err => console.error('Error toggling wishlist:', err));
+    }
+    </script>
+    {% endblock %}
 </body>
 </html>

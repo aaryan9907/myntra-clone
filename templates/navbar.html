@@ -51,16 +51,19 @@
                 </div>
             </div>
 
+            <!-- HOME & LIVING -->
             <div class="nav-item-dropdown">
                 <a href="{% url 'home' %}?gender=home" class="nav-link-top">HOME & LIVING</a>
             </div>
 
+            <!-- BEAUTY -->
             <div class="nav-item-dropdown">
                 <a href="{% url 'home' %}?gender=beauty" class="nav-link-top">BEAUTY</a>
             </div>
 
+            <!-- STUDIO: Point to Home or filtered feed instead of '#' -->
             <div class="nav-item-dropdown">
-                <a href="#" class="nav-link-top studio-link">STUDIO <sup class="new-tag">NEW</sup></a>
+                <a href="{% url 'home' %}" class="nav-link-top studio-link">STUDIO <sup class="new-tag">NEW</sup></a>
             </div>
         </nav>
     </div>
@@ -93,10 +96,10 @@
                     </div>
                     <div class="profile-flyout-links">
                         <a href="{% url 'profile' %}">Overview</a>
-                        <a href="#">Orders</a>
+                        <a href="{% url 'profile' %}">Orders</a>
                         <a href="{% url 'wishlist' %}">Wishlist</a>
-                        <a href="#">Myntra Insider <sup class="new-tag">NEW</sup></a>
-                        <a href="#">Contact Us</a>
+                        <a href="{% url 'profile' %}">Myntra Insider <sup class="new-tag">NEW</sup></a>
+                        <a href="{% url 'profile' %}">Contact Us</a>
                     </div>
                     <div class="profile-flyout-footer">
                         <form action="{% url 'logout' %}" method="POST">
@@ -113,16 +116,16 @@
                     <div class="profile-flyout-links">
                         <a href="{% url 'login' %}">Orders</a>
                         <a href="{% url 'wishlist' %}">Wishlist</a>
-                        <a href="#">Gift Cards</a>
-                        <a href="#">Contact Us</a>
-                        <a href="#">Myntra Insider <sup class="new-tag">NEW</sup></a>
+                        <a href="{% url 'login' %}">Gift Cards</a>
+                        <a href="{% url 'login' %}">Contact Us</a>
+                        <a href="{% url 'login' %}">Myntra Insider <sup class="new-tag">NEW</sup></a>
                     </div>
                 {% endif %}
             </div>
         </div>
 
-        <!-- 2. Wishlist Link -->
-        <a href="{% url 'wishlist' %}" class="nav-action nav-badge-parent">
+        <!-- Wishlist Link -->
+        <a href="{% url 'wishlist' %}" id="nav-wishlist-link" class="nav-action nav-badge-parent">
             <i class="fa-regular fa-heart"></i>
             <span>Wishlist</span>
             {% if wishlist_count > 0 %}
@@ -130,8 +133,8 @@
             {% endif %}
         </a>
 
-        <!-- 3. Bag Link -->
-        <a href="{% url 'bag' %}" class="nav-action nav-badge-parent">
+        <!-- Bag Link -->
+        <a href="{% url 'bag' %}" id="nav-bag-link" class="nav-action nav-badge-parent">
             <i class="fa-solid fa-bag-shopping"></i>
             <span>Bag</span>
             {% if cart_count > 0 %}

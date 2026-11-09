@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from decimal import Decimal
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+import uuid
 
 def show(request):
     all_categories = Category.objects.all()
@@ -229,3 +230,108 @@ def wishlist_view(request):
     wishlist_ids = request.session.get('wishlist', [])
     products = Product.objects.filter(id__in=wishlist_ids)
     return render(request, 'wishlist.html', {'products': products})
+
+@require_POST
+def move_wishlist_to_bag(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    size = request.POST.get('size', 'M')
+    
+    # 1. Add to Bag
+    cart = request.session.get('cart', {})
+    cart_key = f"{product.id}-{size}"
+    cart[cart_key] = cart.get(cart_key, 0) + 1
+    request.session['cart'] = cart
+    
+    # 2. Remove from Wishlist
+    wishlist = request.session.get('wishlist', [])
+    if product.id in wishlist:
+        wishlist.remove(product.id)
+    request.session['wishlist'] = wishlist
+    
+    request.session.modified = True
+    
+    return JsonResponse({
+        'status': 'success',
+        'cart_count': sum(cart.values()),
+        'wishlist_count': len(wishlist),
+    })
+
+@require_POST
+def update_bag_quantity(request, cart_key):
+    try:
+        new_qty = int(request.POST.get('quantity', 1))
+        if new_qty < 1:
+            new_qty = 1
+    except ValueError:
+        new_qty = 1
+
+    cart = request.session.get('cart', {})
+    if cart_key in cart:
+        cart[cart_key] = new_qty
+        request.session['cart'] = cart
+        request.session.modified = True
+
+    return redirect('bag')
+
+
+@require_POST
+def move_bag_to_wishlist(request, cart_key):
+    cart = request.session.get('cart', {})
+    wishlist = request.session.get('wishlist', [])
+
+    if cart_key in cart:
+        product_id, _ = cart_key.split('-')
+        product_id = int(product_id)
+
+        # Remove from cart
+        del cart[cart_key]
+        request.session['cart'] = cart
+
+        # Add to wishlist if not already present
+        if product_id not in wishlist:
+            wishlist.append(product_id)
+            request.session['wishlist'] = wishlist
+
+        request.session.modified = True
+
+    return redirect('bag')
+
+
+def place_order(request):
+    cart = request.session.get('cart', {})
+    if not cart:
+        return redirect('bag')
+
+    # Generate a realistic mock Myntra Order ID
+    order_id = f"MYN-{uuid.uuid4().hex[:8].upper()}"
+
+    # Calculate final summary totals before clearing
+    cart_items = []
+    total_amount = 0
+    for cart_key, quantity in cart.items():
+        product_id, size = cart_key.split('-')
+        try:
+            prod = Product.objects.get(id=product_id)
+            item_total = prod.discounted_price * quantity
+            total_amount += item_total
+            cart_items.append({
+                'product': prod,
+                'size': size,
+                'quantity': quantity,
+                'total_price': item_total,
+            })
+        except Product.DoesNotExist:
+            continue
+
+    total_amount += 20  # Convenience fee
+
+    # Clear shopping bag
+    request.session['cart'] = {}
+    request.session.modified = True
+
+    context = {
+        'order_id': order_id,
+        'order_items': cart_items,
+        'total_amount': total_amount,
+    }
+    return render(request, 'order_success.html', context)

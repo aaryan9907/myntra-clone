@@ -150,7 +150,7 @@
                 // Update badge in navbar
                 let badge = document.getElementById('nav-bag-count');
                 if (!badge) {
-                    const parent = document.querySelector('a[href="{% url 'bag' %}"]');
+                    const parent = document.getElementById('nav-bag-link');
                     badge = document.createElement('span');
                     badge.className = 'nav-icon-badge';
                     badge.id = 'nav-bag-count';
@@ -182,7 +182,7 @@
                 // Update Wishlist badge
                 let badge = document.getElementById('nav-wishlist-count');
                 if (!badge && data.wishlist_count > 0) {
-                    const parent = document.querySelector('a[href="{% url 'wishlist' %}"]');
+                    const parent = document.getElementById('nav-wishlist-link');
                     badge = document.createElement('span');
                     badge.className = 'nav-icon-badge';
                     badge.id = 'nav-wishlist-count';

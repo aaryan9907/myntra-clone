@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Order Confirmed | Myntra{% endblock %}
+
+{% block content %}
+<div style="max-width: 680px; margin: 40px auto 80px; padding: 30px 20px; text-align: center;">
+    
+    <div style="width: 70px; height: 70px; border-radius: 50%; background: #e8f7f2; color: #03a685; display: inline-flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 20px;">
+        <i class="fa-solid fa-check"></i>
+    </div>
+
+    <h2 style="font-size: 24px; font-weight: 800; color: #282c3f; margin-bottom: 8px;">Order Confirmed!</h2>
+    <p style="color: #696b79; font-size: 15px; margin-bottom: 24px;">Thank you for shopping with us. Your order has been placed successfully.</p>
+
+    <div style="background: #fafbfc; border: 1px solid #e9e9eb; border-radius: 6px; padding: 20px; text-align: left; margin-bottom: 30px;">
+        <div style="display: flex; justify-content: space-between; border-bottom: 1px solid #e9e9eb; padding-bottom: 12px; margin-bottom: 16px;">
+            <span style="color: #7e818c; font-size: 13px;">Order ID: <strong style="color: #282c3f;">{{ order_id }}</strong></span>
+            <span style="color: #03a685; font-weight: 700; font-size: 13px;">Confirmed</span>
+        </div>
+
+        <h4 style="font-size: 13px; font-weight: 700; color: #535766; margin-bottom: 12px;">ORDERED ITEMS ({{ order_items|length }})</h4>
+        
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+            {% for item in order_items %}
+            <div style="display: flex; justify-content: space-between; align-items: center; font-size: 14px;">
+                <div>
+                    <strong style="color: #282c3f;">{{ item.product.brand }}</strong> - {{ item.product.title }}
+                    <span style="color: #7e818c; font-size: 12px; margin-left: 6px;">(Size: {{ item.size }}, Qty: {{ item.quantity }})</span>
+                </div>
+                <span style="font-weight: 700; color: #282c3f;">₹{{ item.total_price }}</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <hr style="border: none; border-bottom: 1px solid #e9e9eb; margin: 16px 0;">
+
+        <div style="display: flex; justify-content: space-between; font-size: 16px; font-weight: 700; color: #282c3f;">
+            <span>Total Paid (incl. taxes)</span>
+            <span>₹{{ total_amount }}</span>
+        </div>
+    </div>
+
+    <div style="display: flex; justify-content: center; gap: 16px;">
+        <a href="{% url 'home' %}" style="padding: 14px 28px; background: #ff3f6c; color: #ffffff; text-decoration: none; font-weight: 700; font-size: 14px; border-radius: 4px;">CONTINUE SHOPPING</a>
+        <a href="{% url 'profile' %}" style="padding: 14px 28px; background: #ffffff; border: 1px solid #d4d5d9; color: #282c3f; text-decoration: none; font-weight: 700; font-size: 14px; border-radius: 4px;">VIEW ACCOUNT</a>
+    </div>
+
+</div>
+{% endblock %}
