@@ -125,21 +125,25 @@
         </div>
 
         <!-- Wishlist Link -->
-        <a href="{% url 'wishlist' %}" id="nav-wishlist-link" class="nav-action nav-badge-parent">
-            <i class="fa-regular fa-heart"></i>
+        <a href="{% url 'wishlist' %}" id="nav-wishlist-link" class="nav-action">
+            <div class="nav-icon-container">
+                <i class="fa-regular fa-heart"></i>
+                {% if wishlist_count > 0 %}
+                    <span class="nav-icon-badge" id="nav-wishlist-count">{{ wishlist_count }}</span>
+                {% endif %}
+            </div>
             <span>Wishlist</span>
-            {% if wishlist_count > 0 %}
-                <span class="nav-icon-badge" id="nav-wishlist-count">{{ wishlist_count }}</span>
-            {% endif %}
         </a>
 
         <!-- Bag Link -->
-        <a href="{% url 'bag' %}" id="nav-bag-link" class="nav-action nav-badge-parent">
-            <i class="fa-solid fa-bag-shopping"></i>
+        <a href="{% url 'bag' %}" id="nav-bag-link" class="nav-action">
+            <div class="nav-icon-container">
+                <i class="fa-solid fa-bag-shopping"></i>
+                {% if cart_count > 0 %}
+                    <span class="nav-icon-badge" id="nav-bag-count">{{ cart_count }}</span>
+                {% endif %}
+            </div>
             <span>Bag</span>
-            {% if cart_count > 0 %}
-                <span class="nav-icon-badge" id="nav-bag-count">{{ cart_count }}</span>
-            {% endif %}
         </a>
     </div>
 </header>

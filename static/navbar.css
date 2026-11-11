@@ -172,8 +172,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    cursor: pointer;
+    justify-content: center;
+    text-decoration: none;
     color: #282c3f;
+    cursor: pointer;
+    position: relative;
 }
 
 .nav-action i {
@@ -352,11 +355,22 @@
     position: relative;
     text-decoration: none;
 }
+.nav-icon-container {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-icon-container i {
+    font-size: 18px;
+    color: #282c3f;
+}
 
 .nav-icon-badge {
     position: absolute;
-    top: -5px;
-    right: 3px;
+    top: -6px;
+    right: -10px;
     background-color: #ff3f6c;
     color: #ffffff;
     font-size: 10px;
@@ -367,5 +381,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 4px;
+    padding: 0 3px;
+    line-height: 1;
+    pointer-events: none;
 }
