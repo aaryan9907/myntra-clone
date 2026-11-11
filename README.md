@@ -71,6 +71,21 @@ The project demonstrates:
 * **User Authentication (`/login/` & `/logout/`):** Session authentication with form validation, error messaging, and CSRF protection.
 * **Profile Overview (`/profile/`):** Dedicated account dashboard with a context-aware header flyout displaying the user's name, email, and fast navigation links.
 
+## 📸 Application Screenshots
+
+### 🖼️ Key Interfaces
+| Home / Catalog Grid | Product Detail Page (PDP) |
+| :---: | :---: |
+| ![Home](docs/screenshots/home.png) | ![PDP](docs/screenshots/pdp.png) |
+
+| Shopping Bag | Order Confirmation |
+| :---: | :---: |
+| ![Bag](docs/screenshots/bag.png) | ![Confirmation](docs/screenshots/order_success.png) |
+
+| Wishlist Overview | Mobile Responsive View |
+| :---: | :---: |
+| ![Wishlist](docs/screenshots/wishlist.png) | ![Mobile](docs/screenshots/mobile_view.png) |
+
 ---
 
 ## 6. Navigation Flow Diagram
