@@ -385,3 +385,48 @@
     line-height: 1;
     pointer-events: none;
 }
+
+/* Responsive Navbar */
+@media (max-width: 992px) {
+    .nav-container {
+        padding: 0 16px;
+        gap: 15px;
+    }
+    .nav-links-left {
+        gap: 14px;
+    }
+    .nav-link-top {
+        font-size: 12px;
+        letter-spacing: 0.2px;
+    }
+    .search-container {
+        max-width: 280px;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-header {
+        height: auto;
+        padding: 10px 0;
+    }
+    .nav-container {
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    /* Hide long category text links on small screens to avoid header breakage */
+    .nav-links-left {
+        display: none;
+    }
+    .search-container {
+        order: 3;
+        width: 100%;
+        max-width: 100%;
+        margin-top: 10px;
+    }
+    .nav-actions-right {
+        gap: 16px;
+    }
+    .nav-action span {
+        font-size: 10px;
+    }
+}

@@ -340,3 +340,31 @@
     color: #535665;
     line-height: 1.6;
 }
+
+/* Responsive PDP */
+@media (max-width: 860px) {
+    .pdp-container {
+        flex-direction: column;
+        padding: 10px 16px 40px;
+        gap: 24px;
+    }
+    .pdp-image-section {
+        width: 100%;
+        max-width: 480px;
+        margin: 0 auto;
+    }
+    .pdp-details-section {
+        width: 100%;
+        padding-left: 0;
+    }
+    .pdp-action-buttons {
+        position: sticky;
+        bottom: 0;
+        background: #ffffff;
+        padding: 12px 0;
+        border-top: 1px solid #e9e9eb;
+        z-index: 100;
+        display: flex;
+        gap: 12px;
+    }
+}

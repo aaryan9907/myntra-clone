@@ -442,3 +442,64 @@
 .card-wishlist-btn.active i {
     color: #ff3f6c;
 }
+
+/* Responsive Home & Catalog Grid */
+@media (max-width: 1024px) {
+    .catalog-layout {
+        gap: 20px;
+    }
+    .filter-sidebar {
+        width: 200px;
+    }
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 16px 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        padding: 12px 14px;
+    }
+    .catalog-layout {
+        flex-direction: column;
+        border-top: none;
+        padding-top: 0;
+    }
+    /* Collapse sidebar into a compact horizontal filter/scroll or hidden toggle */
+    .filter-sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #e9e9eb;
+        padding-right: 0;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+    }
+    .filter-options-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        max-height: none;
+        gap: 8px 12px;
+    }
+    .category-tiles-container {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    .category-tile {
+        padding: 24px;
+    }
+    /* 2 columns on mobile devices like Myntra mobile web */
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px 10px;
+    }
+    .product-brand {
+        font-size: 13px;
+    }
+    .product-title {
+        font-size: 11px;
+    }
+    .discounted-price {
+        font-size: 13px;
+    }
+}

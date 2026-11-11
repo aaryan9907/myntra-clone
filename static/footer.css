@@ -219,7 +219,7 @@ body.site-wrapper {
 }
 
 /* Responsive adjustments */
-@media (max-width: 992px) {
+@media (max-width: 900px) {
     .footer-main-grid {
         grid-template-columns: 1fr 1fr;
         gap: 30px;
@@ -229,8 +229,13 @@ body.site-wrapper {
     }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 520px) {
     .footer-main-grid {
         grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    .app-download-buttons {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }

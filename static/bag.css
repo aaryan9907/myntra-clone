@@ -246,3 +246,29 @@
     text-decoration: none;
     border-radius: 4px;
 }
+
+/* Responsive Shopping Bag */
+@media (max-width: 900px) {
+    .bag-page-container {
+        padding: 16px 14px 60px;
+    }
+    .bag-layout {
+        flex-direction: column;
+        gap: 24px;
+    }
+    .bag-items-column {
+        width: 100%;
+    }
+    .bag-summary-column {
+        width: 100%;
+        position: static;
+    }
+    .cart-item-card {
+        padding: 12px;
+        gap: 14px;
+    }
+    .item-img-box {
+        width: 90px;
+        height: 120px;
+    }
+}

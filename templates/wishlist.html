@@ -227,6 +227,30 @@
         text-align: center;
         padding: 90px 20px;
     }
+
+    @media (max-width: 600px) {
+        .wishlist-items-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        .wishlist-page-wrapper {
+            padding: 0 12px;
+            margin-top: 16px;
+        }
+        .wishlist-info {
+            padding: 8px 10px;
+        }
+        .wishlist-brand {
+            font-size: 13px;
+        }
+        .wishlist-title {
+            font-size: 11px;
+        }
+        .move-to-bag-cta {
+            padding: 9px 0;
+            font-size: 11px;
+        }
+    }
 </style>
 {% endblock %}
 
