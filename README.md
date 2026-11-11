@@ -73,6 +73,13 @@ The project demonstrates:
 
 ## 📸 Application Screenshots
 
+### 🎥 Walkthrough Video
+### 🎥 Walkthrough Video
+
+[![Watch Demo Walkthrough](https://img.shields.io/badge/Google_Drive-Watch_Walkthrough_Video-4285F4?style=for-the-badge&logo=googledrive&logoColor=white)](https://drive.google.com/file/d/1hkUji4o2bcUr_30vQcrtnjReiJIRBGE3/view?usp=drive_link)
+
+> **Note:** Click the badge above to watch the complete full-resolution video demonstration covering setup, catalog navigation, PDP interactions, wishlist/bag session management, and the checkout flow.
+
 ### 🖼️ Key Interfaces
 | Home / Catalog Grid | Product Detail Page (PDP) |
 | :---: | :---: |
